@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, Query
 from app.db import test_connection, get_servicio, get_servicios_stats
+from pydantic import BaseModel
+from app.predict import predecir
 
 app = FastAPI(
     title="API de Gestión de Datos - Bank Marketing",
@@ -27,7 +29,7 @@ def db_health():
 # --- Endpoints de Datos ---
 
 @app.get("/servicio")
-def listar_suscripciones(limit: int = Query(default=20, ge=1, le=100)):
+def listar_suscripciones(limit: int = Query(default=500, ge=1, le=11161)):
     """Obtiene los registros de la base de datos en Supabase"""
     try:
         data = get_servicio(limit=limit)
@@ -50,3 +52,28 @@ def estadisticas_banco():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+class PredictRequest(BaseModel):
+    age: int
+    job: int
+    marital: int
+    education: int
+    default: int
+    balance: float
+    housing: int
+    loan: int
+    contact: int
+    day: int
+    month: int
+    duration: int
+    campaign: int
+    pdays: int
+    previous: int
+    poutcome: int
+    es_cliente_nuevo: int
+    tiene_doble_prestamo: int
+    duration_min: float
+
+@app.post("/predict")
+def predict_endpoint(data: PredictRequest):
+    return predecir(data.model_dump())

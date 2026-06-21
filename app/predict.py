@@ -26,19 +26,24 @@ def predecir(data):
         data["duration_min"]
     ]]
 
-    pred = modelo.predict(valores)[0]
-
-    try:
-        prob = round(float(np.max(modelo.predict_proba(valores)[0])) * 100, 2)
-    except:
-        prob = None
-
     pred = int(modelo.predict(valores)[0])
 
-    resultado = "SI" if pred == 1 else "NO"
+    try:
+        proba = modelo.predict_proba(valores)[0]
+
+        probability_no = round(float(proba[0]) * 100, 2)
+        probability_si = round(float(proba[1]) * 100, 2)
+
+    except Exception:
+        probability_no = None
+        probability_si = None
 
     return {
-        "prediccion": pred,
-        "resultado": resultado,
-        "probabilidad_porcentaje": prob
+        "status": "ok",
+        "prediction": {
+            "predicted_class": pred,
+            "predicted_label": "SI" if pred == 1 else "NO",
+            "probability_no": probability_no,
+            "probability_si": probability_si
+        }
     }

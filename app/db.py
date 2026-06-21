@@ -57,7 +57,7 @@ def get_servicios_stats():
     round(avg(age)::numeric, 2) as promedio_edad,
     count(*) FILTER (WHERE deposit = 1) as suscritos_si,
     count(*) FILTER (WHERE deposit = 0) as suscritos_no
-    FROM public.bank_marketing;
+    FROM public.caso2;
     '''
 
     # Consulta por tipo de trabajo (job)

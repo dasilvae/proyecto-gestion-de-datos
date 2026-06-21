@@ -2,6 +2,7 @@ import joblib
 import numpy as np
 
 modelo = joblib.load("artifacts/predictor_bank_tree.joblib")
+scaler = joblib.load("artifacts/scaler.joblib")
 
 def predecir(data):
     valores = [[
@@ -25,7 +26,7 @@ def predecir(data):
         data["tiene_doble_prestamo"],
         data["duration_min"]
     ]]
-
+    valores = scaler.transform(valores)
     pred = int(modelo.predict(valores)[0])
 
     try:
@@ -47,3 +48,4 @@ def predecir(data):
             "probability_si": probability_si
         }
     }
+print(type(modelo))

@@ -35,7 +35,7 @@ def get_servicio(limit: int = 20):
     params = get_connection_params()
     with psycopg.connect(**params, row_factory=dict_row) as conn:
         with conn.cursor() as cur:
-            cur.execute('SELECT * FROM public.bank_marketing LIMIT %s;', (limit,))
+            cur.execute('SELECT * FROM public.caso2 LIMIT %s;', (limit,))
             rows = cur.fetchall()
             
             # Convertimos todo a tipos básicos de Python (int, float, str)
@@ -63,7 +63,7 @@ def get_servicios_stats():
     # Consulta por tipo de trabajo (job)
     job_query = '''
     SELECT job, count(*) as total
-    FROM public.bank_marketing
+    FROM public.caso2
     GROUP BY job
     ORDER BY total DESC;
     '''
@@ -71,7 +71,7 @@ def get_servicios_stats():
     # Consulta por educación
     education_query = '''
     SELECT education, count(*) as total
-    FROM public.bank_marketing
+    FROM public.caso2
     GROUP BY education
     ORDER BY total DESC;
     '''
